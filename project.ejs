@@ -1,0 +1,157 @@
+<%- include("header") -%>
+
+<style>
+  /* Container styles */
+  .container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  /* Half styles */
+  .half {
+    width: 48%; /* Adjust as needed */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  /* Box styles */
+  .box {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  .box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  /* Item styles */
+  .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .item p {
+    margin: 0;
+    margin-left: 10px;
+  }
+  /* Navbar styles */
+  .navbar {
+    margin-top: 20px;
+  }
+  .navlist {
+    list-style-type: none;
+    padding: 0;
+  }
+  .nav-element {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .nav-element a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .nav-element a:hover {
+    background-color: #f0f0f0;
+  }
+  /* Animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* Input styles */
+  input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 70%;
+  }
+  button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<div class="container fade-in">
+  <div class="half">
+    <div class="box">
+      <h1 id="heading"><%= listTitle %></h1>
+    </div>
+
+    <div class="box">
+      <% newListItems.forEach((item)=>{ %>
+      <form action="/delete" method="post">
+        <div class="item">
+          <input
+            type="checkbox"
+            name="checkbox"
+            value="<%= item._id %>"
+            onchange="this.form.submit()"
+          />
+          <p><%= item.name %></p>
+        </div>
+        <input type="hidden" name="listName" value="<%= listTitle %>" />
+      </form>
+      <% }) %>
+
+      <div class="item">
+        <form action="/" method="post" class="addItem">
+          <input
+            type="text"
+            name="newItem"
+            id="newItem"
+            placeholder="Type to add..."
+            autocomplete="off"
+          />
+          <button type="submit" name="list" value="<%= listTitle %>">+</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="half">
+    <h1 id="list-heading">Your Lists:</h1>
+
+    <nav class="navbar">
+      <ol class="navlist">
+        <li class="nav-element"><a href="/">Default</a></li>
+
+        <% lists.forEach((item)=>{ %>
+        <li class="nav-element"><a href="/<%= item %>"><%= item %></a></li>
+        <% }) %>
+      </ol>
+
+      <form action="/create" method="post" class="addItem">
+        <input
+          type="text"
+          name="newList"
+          id="newItem"
+          placeholder="Create/Go to..."
+          autocomplete="off"
+        />
+        <button type="submit" name="list">+</button>
+      </form>
+    </nav>
+  </div>
+</div>
+
+<%- include("footer") -%>
